@@ -38,6 +38,10 @@ export class LambdaFunction extends Construct {
       runtime: lambda.Runtime.PYTHON_3_10,
       tracing: lambda.Tracing.ACTIVE,
       ...(!props.isPooledDeploy && {
+        /*
+            Disabled for platinum reserved concurrency due to AWS account concurrency limit of 10
+            Awaiting AWS Support response on limit increase -- MGeiger
+        */
         // reservedConcurrentExecutions: props.lambdaReserveConcurrency,
       }),
       layers: [props.lambdaServerlessSaaSLayers, lambdaInsightsLayer],
