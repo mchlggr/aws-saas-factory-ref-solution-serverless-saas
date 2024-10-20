@@ -35,7 +35,7 @@ if (!process.env.CDK_PARAM_SYSTEM_ADMIN_ROLE_NAME) {
 
 // default values for optional input parameters
 const defaultStageName = 'prod';
-const defaultLambdaReserveConcurrency = '0';
+const defaultLambdaReserveConcurrency = '1';
 const defaultLambdaCanaryDeploymentPreference = 'True';
 const defaultApiKeyPlatinumTierParameter = '88b43c36-802e-11eb-af35-38f9d35b2c15-test2';
 const defaultApiKeyPremiumTierParameter = '6db2bdc2-6d96-11eb-a56f-38f9d33cfd0f-test2';
