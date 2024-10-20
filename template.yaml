@@ -1,0 +1,24 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: product_service.get_product
+      CodeUri: server/src/ProductService
+      Runtime: python3.10
+      Architectures:
+      - x86_64
+      Layers:
+      - !Ref Layer1
+    Metadata:
+      SamResourceId: Function
+
+  Layer1:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      ContentUri: server/src/layers
+      CompatibleRuntimes:
+        - python3.10
