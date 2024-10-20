@@ -1,1 +1,6 @@
 /server/cdk.out/
+/archive
+/.idea
+/server/cdk
+/aws
+/.aws-sam

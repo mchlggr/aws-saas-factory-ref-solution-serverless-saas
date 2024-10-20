@@ -38,7 +38,7 @@ export class LambdaFunction extends Construct {
       runtime: lambda.Runtime.PYTHON_3_10,
       tracing: lambda.Tracing.ACTIVE,
       ...(!props.isPooledDeploy && {
-        reservedConcurrentExecutions: props.lambdaReserveConcurrency,
+        // reservedConcurrentExecutions: props.lambdaReserveConcurrency,
       }),
       layers: [props.lambdaServerlessSaaSLayers, lambdaInsightsLayer],
       environment: {
