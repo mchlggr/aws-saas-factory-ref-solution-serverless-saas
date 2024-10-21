@@ -51,6 +51,8 @@ export class NavComponent implements OnInit {
   }
 
   switchTenant() {
+    // This is a quick and dirty solution to switch tenants.
+    // Really, there is probably a better way to handle this.
     localStorage.removeItem('tenantName');
     localStorage.removeItem('userPoolId');
     localStorage.removeItem('appClientId');
