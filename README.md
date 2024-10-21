@@ -69,7 +69,3 @@ To debug from Pycharm, follow the steps below:
 5. Start debugging:
    - Click on the debug icon or press Shift+F9. 
    - The debugger will pause at the specified breakpoints.
-
-Example PyCharm run configurations are included here:
-- [PostUser.run.xml](.run/%5BLocal%5D%20UserFunctionHandler%20-_%20Post.run.xml)
-- [GetProduct.run.xml](.run/Dev%20-_%20Get%20Product.run.xml)
