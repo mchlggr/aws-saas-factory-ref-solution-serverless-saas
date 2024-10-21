@@ -2,9 +2,18 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.5.
 
+## Generating Local SSL Certificates
+Open `cd ./clients/certs` and run `./generate-local-certs.sh` to generate a self-signed SSL certificate for your local development server.
+This will create a self-signed certificate self-signed.crt and a corresponding private key self-signed.key in a directory named certs.
+
+***Important Notes:***
+
+- ***Do NOT use these certificates in production. Self-signed certificates are intended for development purposes only.***
+- ***Avoid committing the certificates to source control for security reasons.***
+
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `ng dev` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

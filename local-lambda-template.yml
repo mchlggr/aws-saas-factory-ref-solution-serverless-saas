@@ -90,13 +90,13 @@ Resources:
           IDP_DETAILS: >-
             {"name":"Cognito","details":{"userPoolId":"us-east-1_DJPi8hlnJ","appClientId":"6a32trcra4jf2p0n4hvjddo0ce"}}
       Policies:
-        - !Ref onPolicy
+        - !Ref UserFunctionPolicy
       Architectures:
         - x86_64
       Layers:
         - !Ref ServerLayers
     Metadata:
-      SamResourceId: GetUsersFunction
+      SamResourceId: UserFunctionHandler
 
   GetProductsFunction:
     Type: AWS::Serverless::Function

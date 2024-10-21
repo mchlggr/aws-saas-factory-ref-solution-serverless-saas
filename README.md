@@ -14,6 +14,15 @@ We have also created a workshop that you can use as a reference to understand th
 - Make sure you have the latest version of [git-remote-codecommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-git-remote-codecommit.html) installed.
 - Make sure that you have Node 18 or above.
 
+## Generating Local SSL Certificates for Local Development
+Open `cd ./clients/certs` and run `./generate-local-certs.sh` to generate a self-signed SSL certificate for your local development server.
+This will create a self-signed certificate self-signed.crt and a corresponding private key self-signed.key in a directory named certs.
+
+***Important Notes:***
+
+- ***Do NOT use these certificates in production. Self-signed certificates are intended for development purposes only.***
+- ***Avoid committing the certificates to source control for security reasons.***
+
 ## Deploying
 
 To deploy this reference solution run below script. Replace the "test@example.com" email address with yours. This email address will be used to setup an admin user in the control plane of this reference solution.
@@ -41,3 +50,26 @@ Run below script to clean up
 cd scripts
 ./cleanup.sh
 ```
+
+## Running the Debugger
+
+Lambdas can be debugged locally with AWS SAM. To prepare AWS lambda for local debugging, first export an initial SAM template directly from the Lambda console to use as a starting point for your local lambda template. Then, simplify the local developer lambda template using the exported SAM files. Ensure that Lambda Layers are correctly configured to share code among different services. It may also be helpful to inspect values from the lambda logs for the input.
+
+To debug from Pycharm, follow the steps below:
+
+1. Open your project in PyCharm. 
+2. Configure AWS Toolkit:
+   - to Settings/Preferences > AWS Toolkit.
+   - Set up your AWS credentials if needed
+3.	Set up a Run/Debug Configuration:
+   - Click on Run > Edit Configurations.
+   - Add a new AWS SAM Application configuration.
+   - Select your SAM template file and specify the Lambda function to debug. 
+4. Set breakpoints in your code where needed. 
+5. Start debugging:
+   - Click on the debug icon or press Shift+F9. 
+   - The debugger will pause at the specified breakpoints.
+
+Example PyCharm run configurations are included here:
+- [PostUser.run.xml](.run/%5BLocal%5D%20UserFunctionHandler%20-_%20Post.run.xml)
+- [GetProduct.run.xml](.run/Dev%20-_%20Get%20Product.run.xml)
