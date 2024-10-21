@@ -13,6 +13,8 @@ We have also created a workshop that you can use as a reference to understand th
 - Make sure you have the latest version of [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/cli.html) installed. Not having the release version of CDK can cause deployment issues.
 - Make sure you have the latest version of [git-remote-codecommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-git-remote-codecommit.html) installed.
 - Make sure that you have Node 18 or above.
+- For local lambda development, Make sure you have [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.htmlhttps://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) installed
+- An AWS Toolkits plugin will also help if your using [PyCharm](https://aws.amazon.com/pycharm/) or [VSCode](https://aws.amazon.com/visualstudiocode/)
 
 ## Generating Local SSL Certificates for Local Development
 Open `cd ./clients/certs` and run `./generate-local-certs.sh` to generate a self-signed SSL certificate for your local development server.
