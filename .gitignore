@@ -4,3 +4,4 @@
 /server/cdk
 /aws
 /.aws-sam
+*/.aws-sam
