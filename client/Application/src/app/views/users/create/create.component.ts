@@ -6,6 +6,7 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {UsersService} from '../users.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from "@angular/router";
 
 /**
  * Custom email validator function using regex.
@@ -29,11 +30,13 @@ export class CreateComponent implements OnInit {
   userForm: FormGroup;
   error: boolean = false;
   success: boolean = false;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private userSvc: UsersService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.userForm = this.fb.group({
       userName: [null, [Validators.required]],
@@ -51,16 +54,25 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  cancel() {
+    this.router.navigate(['products']);
+  }
+
   onSubmit() {
     const user = this.userForm.value;
+    this.loading = true;
     this.userSvc.create(user).subscribe(
       () => {
         this.success = true;
+        this.router.navigate(['users']);
         this.openErrorMessageSnackBar('Successfully created new user!');
       },
       (err) => {
         this.error = true;
         this.openErrorMessageSnackBar('An unexpected error occurred!');
+      },
+      () => {
+        this.loading = false;
       }
     );
   }

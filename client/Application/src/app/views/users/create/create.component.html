@@ -53,7 +53,7 @@
                 <button
                 mat-raised-button
                 class="btn btn-block btn-primary"
-                [disabled]="!userForm.valid"
+                [disabled]="!userForm.valid || loading"
                 (click)="onSubmit()"
                 type="button"
                 >
@@ -62,7 +62,7 @@
                 <button
                   mat-raised-button
                   class="btn btn-block btn-danger"
-                  routerLink="/users"
+                  (click)="cancel()"
                   type="button"
                 >
                   <span>Cancel</span>
