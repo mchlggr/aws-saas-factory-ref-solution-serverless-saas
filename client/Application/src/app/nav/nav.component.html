@@ -1,4 +1,28 @@
-<amplify-authenticator [hideSignUp]="true">
+<amplify-authenticator variation="modal" [hideSignUp]="true">
+  <ng-template amplifySlot="sign-in-header">
+    <div style="padding: var(--amplify-space-large); text-align: center">
+      <h1>{{ tenantName || "Serverless SaaS" }}</h1>
+    </div>
+  </ng-template>
+
+  <ng-template amplifySlot="sign-in-footer">
+    <div style="text-align: center; padding: var(--amplify-space-small); row-gap: 12px">
+      <button type="button"
+              class="amplify-button amplify-button--fullwidth amplify-button--link amplify-button--small"
+              style="font-weight: normal; margin-bottom: var(--amplify-space-small)"
+      >
+        Forgot your password?
+      </button>
+      <button
+        (click)="switchTenant()"
+        class="amplify-button amplify-button--fullwidth amplify-button--link amplify-button--small"
+        style="font-weight: normal; margin-bottom: var(--amplify-space-small)"
+      >
+        Switch Instance
+      </button>
+    </div>
+  </ng-template>
+
   <ng-template
     amplifySlot="authenticated"
     let-user="user"
@@ -20,8 +44,9 @@
         <mat-nav-list>
           <mat-list-item *ngFor="let navItem of navItems">
             <mat-icon mat-list-icon class="nav-icon material-symbols-outlined">{{
-              navItem.icon
-            }}</mat-icon>
+                navItem.icon
+              }}
+            </mat-icon>
             <a mat-list-item routerLink="{{ navItem.url }}">{{ navItem.name }}</a>
           </mat-list-item>
         </mat-nav-list>
@@ -53,7 +78,7 @@
             <span>Login</span>
           </button>
         </ng-template>
-        <span style="margin: 8px">{{ (username$ | async) || user.username}}</span>
+        <span style="margin: 8px">{{ (username$ | async) || user.username }}</span>
         <mat-divider></mat-divider>
         <button mat-menu-item>
           <mat-icon class="material-symbols-outlined">face</mat-icon>

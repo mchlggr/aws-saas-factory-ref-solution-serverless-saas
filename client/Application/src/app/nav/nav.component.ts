@@ -21,6 +21,7 @@ import { AuthConfigurationService } from '../views/auth/auth-configuration.servi
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
+  public tenantName: string = '';
   loading$: Observable<boolean> = of(false);
   isAuthenticated$: Observable<Boolean> | undefined;
   username$: Observable<string> | undefined;
@@ -49,8 +50,17 @@ export class NavComponent implements OnInit {
     );
   }
 
+  switchTenant() {
+    localStorage.removeItem('tenantName');
+    localStorage.removeItem('userPoolId');
+    localStorage.removeItem('appClientId');
+    localStorage.removeItem('apiGatewayUrl');
+    location.reload();
+  }
+
   ngOnInit(): void {
     try {
+      this.tenantName = localStorage.getItem('tenantName') || '';
       const s = Auth.currentSession().catch((err) => {
         console.log('Failed to get current session. Err: ', err);
         return err;
