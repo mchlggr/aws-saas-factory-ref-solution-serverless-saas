@@ -53,7 +53,7 @@
               mat-raised-button
               color="primary"
               (click)="(submit)"
-              [disabled]="!tenantForm.valid"
+              [disabled]="!tenantForm.valid || submitting"
               type="submit"
               *ngIf="!submitting"
             >

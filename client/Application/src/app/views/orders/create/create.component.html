@@ -49,7 +49,7 @@
                 >
                 </mat-progress-spinner>
               </mat-card>
-        
+
             </div>
             <mat-card-footer>
               <div class="button-panel">
@@ -57,7 +57,7 @@
                   mat-raised-button
                   color="primary"
                   type="submit"
-                  [disabled]="!orderForm.valid || !productQuantity"
+                  [disabled]="!orderForm.valid || !productQuantity || submitting"
                 >
                   Submit
                 </button>

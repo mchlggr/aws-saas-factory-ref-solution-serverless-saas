@@ -50,7 +50,7 @@
               mat-raised-button
               color="primary"
               (click)="(submit)"
-              [disabled]="!productForm.valid"
+              [disabled]="!productForm.valid || submitting"
             >
               Submit
             </button>

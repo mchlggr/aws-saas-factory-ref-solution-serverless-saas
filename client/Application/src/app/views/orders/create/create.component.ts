@@ -21,6 +21,8 @@ export class CreateComponent implements OnInit {
   orderProducts: LineItem[] = [];
   isLoadingProducts: boolean = true;
   error = '';
+  submitting: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private productSvc: ProductService,
@@ -96,6 +98,10 @@ export class CreateComponent implements OnInit {
           quantity: p.quantity,
         })),
     };
-    this.orderSvc.create(val).subscribe(() => this.router.navigate(['orders']));
+    this.submitting = true;
+    this.orderSvc.create(val).subscribe({
+        next: () => this.router.navigate(['orders']),
+        complete: () => (this.submitting = false)
+    });
   }
 }

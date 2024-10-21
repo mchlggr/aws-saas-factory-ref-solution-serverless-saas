@@ -53,7 +53,7 @@
                 <button
                 mat-raised-button
                 class="btn btn-block btn-primary"
-                [disabled]="!userForm.valid || loading"
+                [disabled]="!userForm.valid || submitting"
                 (click)="onSubmit()"
                 type="button"
                 >

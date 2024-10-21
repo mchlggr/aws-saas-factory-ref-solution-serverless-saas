@@ -6,6 +6,11 @@ interface IdentityProviderStackProps extends StackProps {
   tenantId: string;
 }
 
+// This is the domain that we will use to redirect the user to the login page
+// It will need to be updated to the domain that you are using for your CloudFront distribution
+// Better yet, this should be a custom domain in Route 53 and then that domain can be here
+const loginDomainUrl = 'dzua8yen93nwp.cloudfront.net'
+
 export class IdentityProvider extends Construct {
   public readonly tenantUserPool: aws_cognito.UserPool;
   public readonly tenantUserPoolClient: aws_cognito.UserPoolClient;
@@ -21,6 +26,10 @@ export class IdentityProvider extends Construct {
           required: true,
           mutable: true,
         },
+      },
+      userInvitation: {
+        emailSubject: 'Your invite to join Serverless SaaS',
+        emailBody: `Hello {username},\n\nYou have been invited to join our serverless SaaS service. Please use the following link to login and complete your registration:\n${loginDomainUrl}\n\nYour temporary password is {####}`,
       },
       customAttributes: {
         tenantId: new aws_cognito.StringAttribute({

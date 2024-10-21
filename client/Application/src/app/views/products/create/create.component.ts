@@ -12,6 +12,8 @@ import { ProductService } from '../product.service';
 export class CreateComponent implements OnInit {
   productForm: FormGroup;
   categories: string[] = ['category1', 'category2', 'category3', 'category4'];
+  submitting: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private productSvc: ProductService,
@@ -38,11 +40,15 @@ export class CreateComponent implements OnInit {
   }
 
   submit() {
+    this.submitting = true
     this.productSvc.post(this.productForm.value).subscribe({
       next: () => this.router.navigate(['products']),
       error: (err) => {
         alert(err.message);
         console.error(err);
+      },
+      complete: () => {
+        this.submitting = false
       },
     });
   }

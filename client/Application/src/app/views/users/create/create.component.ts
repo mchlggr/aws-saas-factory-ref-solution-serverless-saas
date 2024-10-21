@@ -30,7 +30,7 @@ export class CreateComponent implements OnInit {
   userForm: FormGroup;
   error: boolean = false;
   success: boolean = false;
-  loading: boolean = false;
+  submitting: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -60,20 +60,18 @@ export class CreateComponent implements OnInit {
 
   onSubmit() {
     const user = this.userForm.value;
-    this.loading = true;
-    this.userSvc.create(user).subscribe(
-      () => {
+    this.submitting = true;
+    this.userSvc.create(user).subscribe({
+      next: () => {
         this.success = true;
         this.router.navigate(['users']);
         this.openErrorMessageSnackBar('Successfully created new user!');
       },
-      (err) => {
+      error: (err) => {
         this.error = true;
         this.openErrorMessageSnackBar('An unexpected error occurred!');
       },
-      () => {
-        this.loading = false;
-      }
-    );
+      complete: () => (this.submitting = false)
+  });
   }
 }
