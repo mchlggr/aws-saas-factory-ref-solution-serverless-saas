@@ -7,7 +7,12 @@ if [[ -z "$CDK_PARAM_SYSTEM_ADMIN_EMAIL" ]]; then
   exit 1
 fi
 
-export REGION=$(aws configure get region)
+# This wasn't working for me from within Github Actions, so I'm hardcoding the region for now
+# Don't switch to this until you've tested it locally and in github actions
+# TODO(MGEIGER): Test this in github actions
+#export REGION=$(aws configure get region)
+export REGION="us-east-1"
+
 export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 
 # Create S3 code source Bucket.

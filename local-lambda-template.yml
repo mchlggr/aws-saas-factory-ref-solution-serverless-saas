@@ -1,0 +1,142 @@
+Resources:
+  UserFunctionPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+        PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - cognito-idp:AdminAddUserToGroup
+                  - cognito-idp:AdminCreateUser
+                  - cognito-idp:AdminDeleteUser
+                  - cognito-idp:AdminDisableUser
+                  - cognito-idp:AdminEnableUser
+                  - cognito-idp:AdminGetUser
+                  - cognito-idp:AdminListGroupsForUser
+                  - cognito-idp:AdminUpdateUserAttributes
+                  - cognito-idp:CreateGroup
+                  - cognito-idp:GetGroup
+                  - cognito-idp:ListUsers
+                  - cognito-idp:ListUsersInGroup
+                Resource: >-
+                  arn:aws:cognito-idp:us-east-1:615299756113:userpool/us-east-1_DJPi8hlnJ
+                Effect: Allow
+              - Effect: Allow
+                Action:
+                  - xray:PutTraceSegments
+                  - xray:PutTelemetryRecords
+                  - xray:GetSamplingRules
+                  - xray:GetSamplingTargets
+                  - xray:GetSamplingStatisticSummaries
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:log-group:/aws/lambda-insights:*
+
+  ProductFunctionPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - xray:PutTelemetryRecords
+              - xray:PutTraceSegments
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:Scan
+            Resource:
+              - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${UserTableName}'
+              - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ProductTableName}'
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: '*'
+
+  UserFunctionHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: user_management.lambda_handler
+      CodeUri: server/src/UserManagementService
+      Runtime: python3.10
+      Environment:
+        Variables:
+          IDP_DETAILS: >-
+            {"name":"Cognito","details":{"userPoolId":"us-east-1_DJPi8hlnJ","appClientId":"6a32trcra4jf2p0n4hvjddo0ce"}}
+      Policies:
+        - !Ref onPolicy
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref ServerLayers
+    Metadata:
+      SamResourceId: GetUsersFunction
+
+  GetProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: product_service.get_products
+      CodeUri: server/src/ProductService
+      Runtime: python3.10
+      Environment:
+        Variables:
+          IS_POOLED_DEPLOY: 'false'
+          LOG_LEVEL: DEBUG
+          POWERTOOLS_METRICS_NAMESPACE: ServerlessSaaS
+          POWERTOOLS_SERVICE_NAME: ProductService
+          PRODUCT_TABLE_NAME: !Ref ProductTableName
+      Policies:
+        - !Ref ProductFunctionPolicy
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref ServerLayers
+    Metadata:
+      SamResourceId: GetProductsFunction
+
+  ServerLayers:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      ContentUri: server/src/layers
+      CompatibleRuntimes:
+        - python3.10
+
+Parameters:
+  UserTableName:
+    Type: String
+    Description: Name of the DynamoDB table for users
+    Default: Users
+  ProductTableName:
+    Type: String
+    Description: Name of the DynamoDB table for products
+    Default: 'serverless-saas-ref-arch-tenant-template-8a6eee66-df72-46b7-8356-db1846a1b67b-ServicesProductMicroserviceTable22695F24-3L7RBZUT7R0S'

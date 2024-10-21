@@ -5,3 +5,6 @@
 /aws
 /.aws-sam
 /**/.aws-sam
+
+# Ensure that the virtual environment is not committed
+/venv
