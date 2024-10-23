@@ -28,4 +28,9 @@ export class TenantsService {
   post(tenant: Tenant): Observable<Tenant[]> {
     return this.http.post<Tenant[]>(this.tenantsApiUrl, tenant);
   }
+
+  delete(tenantId: string): Observable<Tenant[]> {
+    const url = `${this.tenantsApiUrl}/${tenantId}`;
+    return this.http.delete<Tenant[]>(url);
+  }
 }

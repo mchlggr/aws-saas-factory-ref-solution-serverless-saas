@@ -94,7 +94,7 @@ export class BootstrapTemplateStack extends Stack {
 `)
       ),
       script: fs.readFileSync('../scripts/deprovision-tenant.sh', 'utf8'),
-      environmentStringVariablesFromIncomingEvent: ['tenantId'],
+      environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
       environmentVariablesToOutgoingEvent: ['tenantStatus'],
       outgoingEvent: DetailType.DEPROVISION_SUCCESS,
       incomingEvent: DetailType.OFFBOARDING_REQUEST,

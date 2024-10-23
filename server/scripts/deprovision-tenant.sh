@@ -81,8 +81,11 @@ if [[ $TIER == "PLATINUM" ]]; then
   echo "Stack name from $TENANT_STACK_MAPPING_TABLE is  $STACK_NAME"
   # Clone the serverless reference solution repository
   export CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME="aws-saas-factory-ref-solution-serverless-saas"
-  git clone codecommit://$CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME
-  cd $CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME/server
+  export CDK_PARAM_CODE_COMMIT_REPOSITORY_URL="https://github.com/mchlggr/$CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME.git"
+  git clone $CDK_PARAM_CODE_COMMIT_REPOSITORY_URL $CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME
+
+  cd "$CDK_PARAM_CODE_COMMIT_REPOSITORY_NAME/server/cdk"
+
   npm install
 
   export CDK_PARAM_SYSTEM_ADMIN_EMAIL="NA"
@@ -96,6 +99,17 @@ if [[ $TIER == "PLATINUM" ]]; then
   export CDK_PARAM_APPLICATION_NAME_PLANE_SOURCE="NA"
   export CDK_PARAM_OFFBOARDING_DETAIL_TYPE="NA"
   export CDK_PARAM_DEPROVISIONING_DETAIL_TYPE="NA"
+
+  export REGION=$AWS_REGION
+  export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+  export CDK_PARAM_S3_BUCKET_NAME="serverless-saas-${ACCOUNT_ID}-${REGION}"
+  echo "CDK_PARAM_S3_BUCKET_NAME: ${CDK_PARAM_S3_BUCKET_NAME}"
+  export CDK_SOURCE_NAME="source.zip"
+
+  VERSIONS=$(aws s3api list-object-versions --bucket "$CDK_PARAM_S3_BUCKET_NAME" --prefix "$CDK_SOURCE_NAME" --query 'Versions[?IsLatest==`true`].{VersionId:VersionId}' --output text 2>&1)
+  export CDK_PARAM_COMMIT_ID=$(echo "$VERSIONS" | awk 'NR==1{print $1}')
+  echo "CDK_PARAM_COMMIT_ID: ${CDK_PARAM_COMMIT_ID}"
 
   echo "undeploying tenant template $STACK_NAME"
   npx cdk destroy $STACK_NAME --force

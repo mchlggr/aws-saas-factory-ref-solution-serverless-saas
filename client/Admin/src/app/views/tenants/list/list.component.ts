@@ -18,14 +18,27 @@ export class ListComponent implements OnInit {
     'tenantEmail',
     'tenantTier',
     'isActive',
+    'Actions'
   ];
   constructor(private tenantSvc: TenantsService) {}
 
   ngOnInit(): void {
-    this.tenantSvc.fetch().subscribe((response:any) => {
-      //console.log('data: ', response.data);
+    this.fetchAll()
+  }
+
+  fetchAll() {
+    this.isLoading = false;
+    this.tenantSvc.fetch().subscribe((response: any) => {
       this.tenantData = response.data;
       this.isLoading = false;
     });
+  }
+
+  delete(tenantId: string) {
+    this.isLoading = true
+    this.tenantSvc.delete(tenantId).subscribe((response: any) => {
+      this.isLoading = false;
+      this.fetchAll()
+    })
   }
 }
